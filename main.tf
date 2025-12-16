@@ -85,23 +85,27 @@ resource "aws_cloudwatch_log_group" "strapi" {
 }
 
 # ---------------- IAM ----------------
-resource "aws_iam_role" "ecs_execution_role" {
+# resource "aws_iam_role" "ecs_execution_role" {
+#   name = "ecsTaskExecutionRole-reshma"
+
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [{
+#       Effect    = "Allow"
+#       Principal = { Service = "ecs-tasks.amazonaws.com" }
+#       Action    = "sts:AssumeRole"
+#     }]
+#   })
+# }
+
+data "aws_iam_role" "ecs_execution_role" {
   name = "ecsTaskExecutionRole-reshma"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Effect    = "Allow"
-      Principal = { Service = "ecs-tasks.amazonaws.com" }
-      Action    = "sts:AssumeRole"
-    }]
-  })
 }
 
-resource "aws_iam_role_policy_attachment" "ecs_policy" {
-  role       = aws_iam_role.ecs_execution_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-}
+# resource "aws_iam_role_policy_attachment" "ecs_policy" {
+#   role       = aws_iam_role.ecs_execution_role.name
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+# }
 
 # ---------------- ECS ----------------
 resource "aws_ecs_cluster" "strapi" {
@@ -114,7 +118,9 @@ resource "aws_ecs_task_definition" "strapi" {
   network_mode             = "awsvpc"
   cpu                      = "512"
   memory                   = "1024"
-  execution_role_arn       = aws_iam_role.ecs_execution_role.arn
+  # execution_role_arn       = aws_iam_role.ecs_execution_role.arn
+  execution_role_arn = data.aws_iam_role.ecs_execution_role.arn
+
 
   depends_on = [aws_cloudwatch_log_group.strapi]
 
