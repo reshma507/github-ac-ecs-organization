@@ -26,11 +26,11 @@ jobs:
       - name: Ensure ECR repo exists
         run: |
           aws ecr describe-repositories \
-            --repository-names strapi-app \
-            --region $AWS_REGION \
+          --repository-names strapi-app-reshma \
+          --region $AWS_REGION \
           || aws ecr create-repository \
-            --repository-name strapi-app \
-            --region $AWS_REGION
+          --repository-name strapi-app-reshma \
+          --region $AWS_REGION
 
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v2
