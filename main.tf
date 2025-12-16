@@ -147,6 +147,7 @@ resource "aws_ecs_task_definition" "strapi" {
         { name = "TRANSFER_TOKEN_SALT", value = var.transfer_token_salt },
         { name = "ENCRYPTION_KEY", value = var.encryption_key },
         { name = "ADMIN_AUTH_SECRET", value = var.admin_auth_secret },
+        { name = "NODE_TLS_REJECT_UNAUTHORIZED", value = "0" },
 
         { name = "DATABASE_CLIENT", value = "postgres" },
         { name = "DATABASE_HOST", value = aws_db_instance.postgres.address },
@@ -154,7 +155,8 @@ resource "aws_ecs_task_definition" "strapi" {
         { name = "DATABASE_NAME", value = var.db_name },
         { name = "DATABASE_USERNAME", value = var.db_username },
         { name = "DATABASE_PASSWORD", value = var.db_password },
-        { name = "DATABASE_SSL", value = "true" }
+        { name = "DATABASE_SSL", value = "true" },
+        { name = "DATABASE_SSL_REJECT_UNAUTHORIZED", value = "false" }
       ]
 
       logConfiguration = {
